@@ -1,4 +1,6 @@
 :80 {
+	encode zstd gzip
+
 	request_body {
 		max_size {$MAX_UPLOAD_MB:50}MiB
 	}
@@ -8,6 +10,11 @@
 	handle /api/* {
 		uri strip_prefix /api
 		reverse_proxy backend:8000
+	}
+
+	handle /assets/* {
+		file_server
+		header Cache-Control "public, max-age=31536000, immutable"
 	}
 
 	handle {
