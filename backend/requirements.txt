@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+pypdf
+pdf2image
+Pillow
+pikepdf
+python-dotenv
+boto3

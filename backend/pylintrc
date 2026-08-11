@@ -1,0 +1,21 @@
+[MASTER]
+init-hook=import sys; sys.path.insert(0, ".")
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    invalid-name,
+    too-few-public-methods,
+    broad-exception-caught,
+    # Convenciones de pytest (fixtures con argumentos sin usar,
+    # imports dentro de fixtures, acceso a miembros protegidos)
+    unused-argument,
+    redefined-outer-name,
+    import-outside-toplevel,
+    protected-access,
+    no-member
+
+[FORMAT]
+max-line-length=120
