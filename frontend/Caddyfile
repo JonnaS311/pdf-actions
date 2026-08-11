@@ -1,11 +1,9 @@
-:80 {
+{$DOMAIN:pdf-actions.13.59.92.146.sslip.io} {
 	encode zstd gzip
 
 	request_body {
 		max_size {$MAX_UPLOAD_MB:50}MiB
 	}
-
-	root * /usr/share/caddy
 
 	handle /api/* {
 		uri strip_prefix /api

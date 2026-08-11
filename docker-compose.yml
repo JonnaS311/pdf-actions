@@ -6,9 +6,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "5173:80"
+      - "80:80"
+      - "443:443"
     environment:
       - MAX_UPLOAD_MB=${MAX_UPLOAD_MB:-50}
+      - DOMAIN=${DOMAIN:-pdf-actions.13.59.92.146.sslip.io}
+    volumes:
+      - caddy_data:/data
     depends_on:
       - backend
     networks:
@@ -51,3 +55,4 @@ networks:
 
 volumes:
   minio_data:
+  caddy_data:
