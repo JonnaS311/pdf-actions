@@ -25,6 +25,7 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ROOT_USER:-admin}
       - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD:-password}
       - MAX_UPLOAD_MB=${MAX_UPLOAD_MB:-50}
+      - UVICORN_WORKERS=${UVICORN_WORKERS:-1}
     depends_on:
       - minio
     networks:
