@@ -5,6 +5,8 @@
 		max_size {$MAX_UPLOAD_MB:50}MiB
 	}
 
+	root * /usr/share/caddy
+
 	handle /api/* {
 		uri strip_prefix /api
 		reverse_proxy backend:8000
