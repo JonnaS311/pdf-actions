@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Tag de imagen GHCR a desplegar (default: latest)"
+        required: false
+        default: latest
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    steps:
+      - name: Determinar tag de imagen
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "IMAGE_TAG=sha-$(echo '${{ github.event.workflow_run.head_sha }}' | cut -c1-7)" >> "$GITHUB_ENV"
+          else
+            echo "IMAGE_TAG=${{ inputs.image_tag }}" >> "$GITHUB_ENV"
+          fi
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true
+          envs: GHCR_USER,GHCR_TOKEN,IMAGE_TAG
+          script: |
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            export IMAGE_TAG="$IMAGE_TAG"
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            docker image prune -af --filter "until=72h"
+        env:
+          GHCR_USER: ${{ secrets.GHCR_USER }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}

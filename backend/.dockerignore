@@ -1,0 +1,13 @@
+.venv
+venv
+__pycache__
+*.pyc
+.pytest_cache
+.pylintrc
+pytest.ini
+requirements-dev.txt
+tests
+.env
+.env-example
+*.log
+.gitignore
