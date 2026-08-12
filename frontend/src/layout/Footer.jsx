@@ -17,6 +17,9 @@ export default function Footer() {
       <Typography variant="body2" color="text.secondary">
         © 2026 PDF Actions. Todos los derechos reservados.
       </Typography>
+      <Typography variant="body2" color="text.secondary">
+        Author by Jonnathan Sotelo
+      </Typography>
     </Box>
   )
 }
